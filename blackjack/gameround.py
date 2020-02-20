@@ -17,7 +17,7 @@ class GameRound():
         print(player.name + '\'s turn:')
         print('hand: ' + player.hand[0])
         while player.status == 'alive':
-            action = input("Would you like to hit (h) or stand (s)")
+            action = player.get_action()
             if action == 'h': #hit
                 player.draw(self.game_deck.game_deck)
                 print("hand: " + '-'.join(player.hand) + ' : ' + str(player.points) + ' points')

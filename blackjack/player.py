@@ -44,6 +44,9 @@ class Player:
         self.update_points()
         self.update_status()
 
+    def get_action(self):
+        return input("Would you like to hit (h) or stand (s)")
+
 class Dealer(Player):
     def __init__(self):
         super().__init__('dealer')
