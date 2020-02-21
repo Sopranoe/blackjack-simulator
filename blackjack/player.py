@@ -55,3 +55,9 @@ class Dealer(Player):
     def update_points(self):
         self.upcard = self.hand[0]
         return self.calculate_points()
+
+class Human(Player):
+    pass
+
+class AiBasic(Player):
+    pass
