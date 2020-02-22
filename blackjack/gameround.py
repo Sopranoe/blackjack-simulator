@@ -15,25 +15,39 @@ class GameRound():
 
     def play(self, player):
         print(player.name + '\'s turn:')
-        print('hand: ' + player.hand[0])
+        print("hand: " + '-'.join(player.hand) + ' : ' + str(player.points) + " points")
         while player.status == 'alive':
             action = player.get_action()
             if action == 'h': #hit
                 player.draw(self.game_deck.game_deck)
-                print("hand: " + '-'.join(player.hand) + ' : ' + str(player.points) + ' points')
             elif action == 's': #stand
-                player.status == 'stand'
-                print("You decided to stand")
-                return player.status
-        return player.status
+                player.status = 'stand'
+                print("Standing with " + str(player.points))
+                #return player.status
+        #return player.status
 
     def play_round(self):
         self.deal_initial_card()
+        print(self.dealer)
         for player in self.players:
             self.play(player)
         self.play(self.dealer)
-            
+        self.evaluate_winners()
+    
+    def evaluate_winners(self):
+        for player in self.players:
+            if player.status == 'stand':
+                if self.dealer.status == 'stand':
+                    if player.points > self.dealer.points:
+                        player.status = 'win'
+                    elif player.points == self.dealer.points:
+                        player.status = 'draw'
+                    else:
+                        player.status = 'lose'
+                elif self.dealer.status == 'bust':
+                    player.status = 'win'
+        print(player.name + " - " + player.status)
 
-game_round = GameRound(4)
+game_round = GameRound()
 
 game_round.play_round()
