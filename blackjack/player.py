@@ -72,5 +72,11 @@ class AiBasic(Player):
     nr_aibasics = 0
 
     def __init__(self, name):
-        super().__init__('AiBasic')
         nr_aibasics += 1
+        super().__init__('AiBasic'+nr_aibasics)
+
+    def get_action(self):
+        if self.points < 17:
+            return "h"
+        else:
+            return "s"
