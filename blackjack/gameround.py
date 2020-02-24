@@ -1,10 +1,10 @@
-from deck import Deck
-from player import Player, Dealer
+from deck import *
+from player import *
 
 class GameRound():
     def __init__(self, nr_players=1):
         self.game_deck = Deck()
-        self.players = [Player('player' + str(i)) for i in range(nr_players)]
+        self.players = [Human('player' + str(i)) for i in range(nr_players)]
         self.dealer = Dealer()
 
     def deal_initial_card(self):
@@ -15,7 +15,7 @@ class GameRound():
 
     def play(self, player):
         print(player.name + '\'s turn:')
-        print("hand: " + '-'.join(player.hand) + ' : ' + str(player.points) + " points")
+        print("hand: " + '-'.join(player.hand) + ' - ' + str(player.points) + " points")
         while player.status == 'alive':
             action = player.get_action()
             if action == 'h': #hit
@@ -28,10 +28,12 @@ class GameRound():
 
     def play_round(self):
         self.deal_initial_card()
-        print(self.dealer)
         for player in self.players:
             self.play(player)
-        self.play(self.dealer)
+        if all(player.status == 'bust' for player in self.players):
+           print("Dealer wins with " + '-'.join(self.dealer.hand) + ' - ' + str(self.dealer.points) + " points") 
+        else:
+            self.play(self.dealer)
         self.evaluate_winners()
     
     def evaluate_winners(self):
@@ -46,8 +48,10 @@ class GameRound():
                         player.status = 'lose'
                 elif self.dealer.status == 'bust':
                     player.status = 'win'
-        print(player.name + " - " + player.status)
+            #hprint(player.name + " - " + player.status)
 
+#    def get_all_states(self):
+#        return 
 game_round = GameRound()
 
 game_round.play_round()

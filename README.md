@@ -24,3 +24,12 @@ A python blackjack game with human and AI players.
 ## Possible Features
 * Allow player to double or split
 * GUI (kivy)
+
+## Possible Python Concepts
+* Object Oriented Programming ✓
+* List Comprehension
+* Lamba
+* Exceptions
+* Tests
+* PyDoc
+* Logging

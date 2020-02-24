@@ -46,7 +46,7 @@ class Player:
         print("hand: " + '-'.join(self.hand) + ' : ' + str(self.points) + ' points')
 
     def get_action(self):
-        return input("Would you like to hit (h) or stand (s)")
+        pass
 
 class Dealer(Player):
     def __init__(self):
@@ -62,7 +62,15 @@ class Dealer(Player):
         return self.hand[0]
 
 class Human(Player):
-    pass
+    def __init__(self, name):
+        super().__init__(name)
+
+    def get_action(self):
+        return input("Would you like to hit (h) or stand (s)")
 
 class AiBasic(Player):
-    pass
+    nr_aibasics = 0
+
+    def __init__(self, name):
+        super().__init__('AiBasic')
+        nr_aibasics += 1
