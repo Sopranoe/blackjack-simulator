@@ -5,7 +5,9 @@ class Player:
         self.points = 0
         self.ace = False
         self.ten = False
-        self.status = 'alive' # 'alive', 'bust', 'stand', 'blackjack', 'win', 'draw', 'lose'
+        self.status = 'alive' # 'alive', 'bust', 'stand', 'blackjack', 'wins', 'draw', 'loses'
+
+    # def __str__():
 
     def update_points(self):
         return self.calculate_points()
@@ -62,18 +64,15 @@ class Dealer(Player):
         return self.hand[0]
 
 class Human(Player):
-    def __init__(self, name):
+    def __init__(self, name='human'):
         super().__init__(name)
 
     def get_action(self):
         return input("Would you like to hit (h) or stand (s)")
 
 class AiBasic(Player):
-    nr_aibasics = 0
-
-    def __init__(self, name):
-        nr_aibasics += 1
-        super().__init__('AiBasic'+nr_aibasics)
+    def __init__(self):
+        super().__init__('AiBasic')
 
     def get_action(self):
         if self.points < 17:

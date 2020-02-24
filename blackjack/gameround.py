@@ -2,12 +2,13 @@ from deck import *
 from player import *
 
 class GameRound():
-    def __init__(self, nr_players=1):
+    def __init__(self, players=[Human(), AiBasic()]):
         self.game_deck = Deck()
-        self.players = [Human('player' + str(i)) for i in range(nr_players)]
+        self.players = players
         self.dealer = Dealer()
 
     def deal_initial_card(self):
+        print(self.players)
         for player in self.players:
             player.draw(self.game_deck.game_deck)
         self.dealer.draw(self.game_deck.game_deck) #open card
@@ -23,8 +24,6 @@ class GameRound():
             elif action == 's': #stand
                 player.status = 'stand'
                 print("Standing with " + str(player.points))
-                #return player.status
-        #return player.status
 
     def play_round(self):
         self.deal_initial_card()
@@ -35,23 +34,24 @@ class GameRound():
         else:
             self.play(self.dealer)
         self.evaluate_winners()
+        for player in self.players:
+            print(player.name + " " + player.status + " with " + str(player.points) + " points")
     
     def evaluate_winners(self):
         for player in self.players:
             if player.status == 'stand':
                 if self.dealer.status == 'stand':
                     if player.points > self.dealer.points:
-                        player.status = 'win'
+                        player.status = 'wins'
                     elif player.points == self.dealer.points:
                         player.status = 'draw'
                     else:
-                        player.status = 'lose'
+                        player.status = 'loses'
                 elif self.dealer.status == 'bust':
-                    player.status = 'win'
-            #hprint(player.name + " - " + player.status)
+                    player.status = 'wins'
+            elif player.status == 'bust':
+                player.status = 'loses'
 
-#    def get_all_states(self):
-#        return 
 game_round = GameRound()
 
 game_round.play_round()
