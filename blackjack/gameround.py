@@ -7,11 +7,13 @@ class GameRound():
         self.players = players
         self.dealer = Dealer()
 
-    def deal_initial_card(self):
+    def deal_initial_cards(self):
         print(self.players)
         for player in self.players:
             player.draw(self.game_deck.game_deck)
         self.dealer.draw(self.game_deck.game_deck) #open card
+        for player in self.players:
+            player.draw(self.game_deck.game_deck)
         self.dealer.draw(self.game_deck.game_deck) #hidden card
 
     def play(self, player):
@@ -23,10 +25,10 @@ class GameRound():
                 player.draw(self.game_deck.game_deck)
             elif action == 's': #stand
                 player.status = 'stand'
-                print("Standing with " + str(player.points))
+                print(player.name + " standing with " + str(player.points))
 
     def play_round(self):
-        self.deal_initial_card()
+        self.deal_initial_cards()
         for player in self.players:
             self.play(player)
         if all(player.status == 'bust' for player in self.players):
@@ -44,7 +46,7 @@ class GameRound():
                     if player.points > self.dealer.points:
                         player.status = 'wins'
                     elif player.points == self.dealer.points:
-                        player.status = 'draw'
+                        player.status = 'draws'
                     else:
                         player.status = 'loses'
                 elif self.dealer.status == 'bust':

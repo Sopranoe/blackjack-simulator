@@ -5,7 +5,7 @@ class Player:
         self.points = 0
         self.ace = False
         self.ten = False
-        self.status = 'alive' # 'alive', 'bust', 'stand', 'blackjack', 'wins', 'draw', 'loses'
+        self.status = 'alive' # 'alive', 'bust', 'stand', 'blackjack', 'wins', 'draws', 'loses'
 
     # def __str__():
 
