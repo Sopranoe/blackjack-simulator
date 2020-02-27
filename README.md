@@ -11,7 +11,7 @@ A python blackjack game with human and AI players.
 * Implement game round ✓
 * Detect winner ✓
 * Dealer action ✓
-* Detect blackjack
+* Detect blackjack ✓
 * Chips balance, betting and payout
 * AI players
   * dealer strategy ✓

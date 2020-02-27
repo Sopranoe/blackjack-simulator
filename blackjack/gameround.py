@@ -49,9 +49,11 @@ class GameRound():
                         player.status = 'loses'
                 elif self.dealer.status == 'bust':
                     player.status = 'wins'
+                elif self.dealer.status == 'blackjack':
+                    player.status = 'loses'
             elif player.status == 'bust':
                 player.status = 'loses'
-
+                
 game_round = GameRound()
 
 game_round.play_round()
