@@ -45,7 +45,7 @@ class Player:
         self.hand.append(deck.pop())
         self.update_points()
         self.update_status()
-        print("hand: " + '-'.join(self.hand) + ' : ' + str(self.points) + ' points')
+        print(f'{self.name} received {self.hand[-1]}')
 
     def get_action(self):
         pass

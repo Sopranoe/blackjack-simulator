@@ -8,7 +8,6 @@ class GameRound():
         self.dealer = Dealer()
 
     def deal_initial_cards(self):
-        print(self.players)
         for player in self.players:
             player.draw(self.game_deck.game_deck)
         self.dealer.draw(self.game_deck.game_deck) #open card
@@ -17,8 +16,7 @@ class GameRound():
         self.dealer.draw(self.game_deck.game_deck) #hidden card
 
     def play(self, player):
-        print(player.name + '\'s turn:')
-        print("hand: " + '-'.join(player.hand) + ' - ' + str(player.points) + " points")
+        print(f'{player.name}\'s hand: {"-".join(player.hand)} - {player.points} points')
         while player.status == 'alive':
             action = player.get_action()
             if action == 'h': #hit
@@ -32,12 +30,12 @@ class GameRound():
         for player in self.players:
             self.play(player)
         if all(player.status == 'bust' for player in self.players):
-           print("Dealer wins with " + '-'.join(self.dealer.hand) + ' - ' + str(self.dealer.points) + " points") 
+           print(f'Dealer wins with {"-".join(self.dealer.hand)}\'s hand - {self.dealer.points} points')
         else:
             self.play(self.dealer)
         self.evaluate_winners()
         for player in self.players:
-            print(player.name + " " + player.status + " with " + str(player.points) + " points")
+            print(f'{player.name}: {player.status} with {str(player.points)} points')
     
     def evaluate_winners(self):
         for player in self.players:
