@@ -58,6 +58,8 @@ class GameRound():
             if player.status == 'blackjack':
                 if self.dealer.status != 'blackjack':
                     player.balance += 1.5*player.bet
+                else:
+                    player.status = 'push'
             if player.status == 'win':
                 player.balance += player.bet
             if player.status == 'lose':
