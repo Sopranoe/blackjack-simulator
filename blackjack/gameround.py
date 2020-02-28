@@ -7,8 +7,10 @@ class GameRound():
         self.players = players
         self.dealer = Dealer()
 
-    def deal_initial_cards(self):
+    def initialize_round(self):
         for player in self.players:
+            player.bet = player.get_bet()
+            print(f'{player.name} bets {player.bet}')
             player.draw(self.game_deck.game_deck)
         self.dealer.draw(self.game_deck.game_deck) #open card
         for player in self.players:
@@ -26,33 +28,42 @@ class GameRound():
                 print(player.name + " standing with " + str(player.points))
 
     def play_round(self):
-        self.deal_initial_cards()
+        self.initialize_round()
         for player in self.players:
             self.play(player)
         if all(player.status == 'bust' for player in self.players):
-           print(f'Dealer wins with {"-".join(self.dealer.hand)}\'s hand - {self.dealer.points} points')
+           print(f'Dealer win with {"-".join(self.dealer.hand)}\'s hand - {self.dealer.points} points')
         else:
             self.play(self.dealer)
         self.evaluate_winners()
         for player in self.players:
-            print(f'{player.name}: {player.status} with {str(player.points)} points')
+            print(f'{player.name}(${player.balance}): {player.status} with {str(player.points)} points')
     
     def evaluate_winners(self):
         for player in self.players:
             if player.status == 'stand':
                 if self.dealer.status == 'stand':
                     if player.points > self.dealer.points:
-                        player.status = 'wins'
+                        player.status = 'win'
                     elif player.points == self.dealer.points:
-                        player.status = 'draws'
+                        player.status = 'push'
                     else:
-                        player.status = 'loses'
+                        player.status = 'lose'
                 elif self.dealer.status == 'bust':
-                    player.status = 'wins'
+                    player.status = 'win'
                 elif self.dealer.status == 'blackjack':
-                    player.status = 'loses'
+                    player.status = 'lose'
             elif player.status == 'bust':
-                player.status = 'loses'
+                player.status = 'lose'
+            if player.status == 'blackjack':
+                if self.dealer.status != 'blackjack':
+                    player.balance += 1.5*player.bet
+            if player.status == 'win':
+                player.balance += player.bet
+            if player.status == 'lose':
+                player.balance -= player.bet
+
+            player.bet = 0
                 
 game_round = GameRound()
 
