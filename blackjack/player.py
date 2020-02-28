@@ -5,9 +5,12 @@ class Player:
         self.points = 0
         self.ace = False
         self.ten = False
-        self.status = 'alive' # 'alive', 'bust', 'stand', 'blackjack', 'win', 'push', 'lose'
+        self.status = 'alive'  # 'alive', 'bust', 'stand', 'blackjack', 'win', 'push', 'lose'
         self.balance = balance
         self.bet = 0
+        self.history = {'balance': [balance], 'points': [0],
+                        'hand': [''], 'status': ['']}
+        #self.history = pd.DataFrame(columns=['balance', 'points', 'hand', 'status'])
 
     # def __str__():
 
@@ -54,6 +57,12 @@ class Player:
 
     def get_bet(self):
         return 100
+
+    def save_result(self):
+        self.history["balance"] = self.balance
+        self.history["points"] = self.points
+        self.history["hand"] = self.hand
+        self.history["status"] = self.status
 
 
 class Dealer(Player):
