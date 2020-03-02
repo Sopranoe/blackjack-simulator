@@ -43,8 +43,9 @@ class Player:
                 self.status = 'stand'
         elif self.points > 21:
             self.status = 'bust'
-        else:
-            self.status = 'alive'
+        # else:
+            # self.status = 'alive'  -- was this even needed?
+            # this condition would not work with the current double logic
 
     def draw(self, deck):
         self.hand.append(deck.pop())
@@ -84,7 +85,8 @@ class Human(Player):
         super().__init__(name, balance)
 
     def get_action(self):
-        return input("Would you like to hit (h) or stand (s): ")
+        return input("Would you like to hit (h),"
+                     "stand (s) or double down (d): ")
 
     def get_bet(self):
         while True:
@@ -98,7 +100,9 @@ class AiBasic(Player):
         super().__init__('AiBasic', balance)
 
     def get_action(self):
-        if self.points < 17:
+        if self.points in (9, 10, 11) and len(self.hand) == 2:
+            return "d"
+        elif self.points < 17:
             return "h"
         else:
             return "s"

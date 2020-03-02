@@ -9,6 +9,7 @@ class Round():
 
     def initialize_round(self):
         for player in self.players:
+            player.status = 'alive'
             player.hand = []
             player.bet = player.get_bet()
             print(f'{player.name} bets {player.bet}')
@@ -30,6 +31,15 @@ class Round():
                 player.status = 'stand'
                 print(f'{player.name} standing with '
                       f'{str(player.points)} points')
+            elif action == 'd':
+                if len(player.hand) == 2 and player.balance >= 2*player.bet:
+                    player.bet *= 2
+                    player.status = 'stand'
+                    player.draw(self.game_deck.game_deck)
+                elif len(player.hand) > 2:
+                    print("Double down not possible with more than 2 cards")
+                elif player.balance < 2*player.bet:
+                    print("Not enough money to double down.")
 
     def play_round(self):
         self.initialize_round()

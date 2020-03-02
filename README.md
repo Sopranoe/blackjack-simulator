@@ -14,6 +14,8 @@ A python blackjack game with human and AI players.
 * Detect blackjack ✓
 * Chips balance, betting and payout ✓
 * Add game with multiple game rounds ✓
+* Add double down action ✓
+* Add split action
 * AI players
   * dealer strategy ✓
   * basic strategy
@@ -24,8 +26,7 @@ A python blackjack game with human and AI players.
 * Self-learning AI players
 
 ## Possible Features
-* Allow player to double or split
-* GUI (kivy)
+* GUI
 
 ## Possible Python Concepts
 * Object Oriented Programming ✓
