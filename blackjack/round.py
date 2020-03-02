@@ -45,6 +45,7 @@ class Round():
             print(f'{player.name}(${player.balance}): {player.status} '
                   f'with {str(player.points)} points')
             player.save_result()
+        self.dealer.save_result()  # not really needed
 
     def evaluate_winners(self):
         for player in self.players:

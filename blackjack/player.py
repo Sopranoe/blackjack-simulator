@@ -8,8 +8,8 @@ class Player:
         self.status = 'alive'  # 'alive', 'bust', 'stand', 'blackjack', 'win', 'push', 'lose'
         self.balance = balance
         self.bet = 0
-        self.history = {'balance': [balance], 'points': [0],
-                        'hand': [''], 'status': ['']}
+        self.history = {'balance': [balance], 'points': [0],  # depending on use case, it
+                        'hand': [''], 'status': ['']}  # might be better to initialize all as empty lists
         #self.history = pd.DataFrame(columns=['balance', 'points', 'hand', 'status'])
 
     # def __str__():
@@ -59,10 +59,10 @@ class Player:
         return 100
 
     def save_result(self):
-        self.history["balance"] = self.balance
-        self.history["points"] = self.points
-        self.history["hand"] = self.hand
-        self.history["status"] = self.status
+        self.history["balance"].append(self.balance)
+        self.history["points"].append(self.points)
+        self.history["hand"].append(self.hand)
+        self.history["status"].append(self.status)
 
 
 class Dealer(Player):
