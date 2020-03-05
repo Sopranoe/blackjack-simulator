@@ -1,11 +1,16 @@
 class Hand:
-    def __init__(self):
-        self.cards = []
+    def __init__(self, cards=None, bet=0):
+        self.status = 'alive'  # 'alive', 'bust', 'stand', 'blackjack', 'win', 'push', 'lose'
+        self.bet = bet
         self.points = 0
         self.ace = False
         self.ten = False
-        self.status = 'alive'  # 'alive', 'bust', 'stand', 'blackjack', 'win', 'push', 'lose'
-        self.bet = 0
+        if cards is None:
+            self.cards = []
+        else:
+            self.cards = cards
+            self.update_points()
+            self.update_status()
 
     def update_points(self):
         values = {"A": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7,

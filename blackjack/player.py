@@ -19,14 +19,23 @@ class Player:
 
     def save_result(self):
         self.history["balance"].append(self.balance)
+        self.history["points"].append([])
+        self.history["hands"].append([])
+        self.history["statuses"].append([])
         # better list comprehension?
         for i in range(len(self.hands)):
-            self.history["points"][i].append(self.hands[i].points)
-            self.history["hands"][i].append(self.hands[i].cards)
-            self.history["statuses"][i].append(self.hands[i].status)
+            self.history["points"][-1].append(self.hands[i].points)
+            self.history["hands"][-1].append(self.hands[i].cards)
+            self.history["statuses"][-1].append(self.hands[i].status)
 
     def reset_hands(self):
         self.hands = [Hand()]
+
+    def split(self, hand_number):
+        original_hand = self.hands[hand_number].cards
+        original_bet = self.hands[hand_number].bet
+        self.hands.append(Hand([original_hand[1]], original_bet))
+        self.hands[hand_number].cards = [original_hand[0]]
 
 
 class Dealer(Player):
@@ -48,8 +57,8 @@ class Human(Player):
         super().__init__(name, balance)
 
     def get_action(self, hand_number):
-        return input("Would you like to hit (h),"
-                     "stand (s) or double down (d): ")
+        return input("Would you like to hit (h), double down (d) "
+                     "split (x) or stand (s) ")
 
     def get_bet(self):
         while True:
