@@ -6,81 +6,91 @@ class Round():
         self.game_deck = deck
         self.players = players
         self.dealer = Dealer()
+        self.players_alive = len(self.players)
 
     def initialize_round(self):
+        self.players_alive = len(self.players)
         for player in self.players:
-            player.status = 'alive'
-            player.hand = []
-            player.bet = player.get_bet()
-            print(f'{player.name} bets {player.bet}')
-            player.draw(self.game_deck.game_deck)
-        self.dealer.hand = []
-        self.dealer.draw(self.game_deck.game_deck)  # open card
-        for player in self.players:
-            player.draw(self.game_deck.game_deck)
-        self.dealer.draw(self.game_deck.game_deck)  # hidden card
+            player.reset_hands()
+            player.hands[0].bet = player.get_bet()
+            print(f'{player.name} bets {player.hands[0].bet}')
+            player.hands[0].draw(self.game_deck.game_deck, 2)
+        self.dealer.reset_hands()
+        self.dealer.hands[0].draw(self.game_deck.game_deck, 2)  # open card
 
     def play_hand(self, player):
-        print(f'{player.name}\'s hand: {"-".join(player.hand)} '
-              f'- {player.points} points')
-        while player.status == 'alive':
-            action = player.get_action()
-            if action == 'h':  # hit
-                player.draw(self.game_deck.game_deck)
-            elif action == 's':  # stand
-                player.status = 'stand'
-                print(f'{player.name} standing with '
-                      f'{str(player.points)} points')
-            elif action == 'd':
-                if len(player.hand) == 2 and player.balance >= 2*player.bet:
-                    player.bet *= 2
-                    player.status = 'stand'
-                    player.draw(self.game_deck.game_deck)
-                elif len(player.hand) > 2:
-                    print("Double down not possible with more than 2 cards")
-                elif player.balance < 2*player.bet:
-                    print("Not enough money to double down.")
+        print(f'_____{player.name}\'s turn_____')
+        for hand_number, hand in enumerate(player.hands):
+            print(f'hand({hand_number + 1}): {"-".join(hand.cards)} '
+                  f'- {hand.points} points')
+            while hand.status == 'alive':
+                print(f'{player.name}, hand({hand_number + 1}): '
+                      f'{"-".join(hand.cards)} - {str(hand.points)} points')
+                action = player.get_action(hand_number)
+                if action == 'h':  # hit
+                    hand.draw(self.game_deck.game_deck)
+                elif action == 's':  # stand
+                    hand.status = 'stand'
+                    print(f'{player.name} standing on hand {hand_number + 1} '
+                          f'with {str(hand.points)} points')
+                elif action == 'd':
+                    if len(hand.cards) == 2 and player.balance >= 2*hand.bet:
+                        hand.bet *= 2
+                        hand.status = 'stand'
+                        hand.draw(self.game_deck.game_deck)
+                        print(f'{player.name} {hand.status} after double on hand '
+                              f'{hand_number + 1} with {"-".join(hand.cards)} - '
+                              f'{str(hand.points)} points')
+                    elif len(hand.cards) > 2:
+                        print("Double down not possible with more than 2 cards")
+                    elif player.balance < 2*player.bet:
+                        print("Not enough money to double down.")
+        if all(hand.status == 'bust' for hand in player.hands):
+            self.players_alive -= 1
 
     def play_round(self):
         self.initialize_round()
         for player in self.players:
             self.play_hand(player)
-        if all(player.status == 'bust' for player in self.players):
-            print(f'Dealer win with {"-".join(self.dealer.hand)}\'s hand '
-                  f'- {self.dealer.points} points')
+        if self.players_alive <= 0:
+            print(f'Dealer win with {"-".join(self.dealer.hands[0].cards)}\'s '
+                  f'hand - {self.dealer.points} points')
         else:
             self.play_hand(self.dealer)
         self.evaluate_winners()
+        print("_____results______")
         for player in self.players:
-            print(f'{player.name}(${player.balance}): {player.status} '
-                  f'with {str(player.points)} points')
+            for hand in player.hands:
+                print(f'{player.name}(${player.balance}): {hand.status} '
+                      f'${hand.bet} with {str(hand.points)} points'
+                      f' ({"-".join(hand.cards)})')
+                hand.bet = 0
             player.save_result()
         self.dealer.save_result()  # not really needed
 
     def evaluate_winners(self):
         for player in self.players:
-            if player.status == 'stand':
-                if self.dealer.status == 'stand':
-                    if player.points > self.dealer.points:
-                        player.status = 'win'
-                    elif player.points == self.dealer.points:
-                        player.status = 'push'
+            for hand in player.hands:
+                if hand.status == 'stand':
+                    if self.dealer.hands[0].status == 'stand':
+                        if hand.points > self.dealer.hands[0].points:
+                            hand.status = 'win'
+                        elif hand.points == self.dealer.hands[0].points:
+                            hand.status = 'push'
+                        else:
+                            hand.status = 'lose'
+                    elif self.dealer.hands[0].status == 'bust':
+                        hand.status = 'win'
+                    elif self.dealer.hands[0].status == 'blackjack':
+                        hand.status = 'lose'
+                elif hand.status == 'bust':
+                    hand.status = 'lose'
+                if hand.status == 'blackjack':
+                    if self.dealer.hands[0].status != 'blackjack':
+                        player.balance += 1.5*hand.bet
                     else:
-                        player.status = 'lose'
-                elif self.dealer.status == 'bust':
-                    player.status = 'win'
-                elif self.dealer.status == 'blackjack':
-                    player.status = 'lose'
-            elif player.status == 'bust':
-                player.status = 'lose'
-            if player.status == 'blackjack':
-                if self.dealer.status != 'blackjack':
-                    player.balance += 1.5*player.bet
-                else:
-                    player.status = 'push'
-            if player.status == 'win':
-                player.balance += player.bet
-            if player.status == 'lose':
-                player.balance -= player.bet
-
-            player.bet = 0
+                        hand.status = 'push'
+                if hand.status == 'win':
+                    player.balance += hand.bet
+                if hand.status == 'lose':
+                    player.balance -= hand.bet

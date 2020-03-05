@@ -1,59 +1,17 @@
+from .hand import Hand
+
+
 class Player:
     def __init__(self, name, balance):
         self.name = name
-        self.hand = []
-        self.points = 0
-        self.ace = False
-        self.ten = False
-        self.status = 'alive'  # 'alive', 'bust', 'stand', 'blackjack', 'win', 'push', 'lose'
+        self.hands = []
         self.balance = balance
-        self.bet = 0
-        self.history = {'balance': [balance], 'points': [0],  # depending on use case, it
-                        'hand': [''], 'status': ['']}  # might be better to initialize all as empty lists
-        #self.history = pd.DataFrame(columns=['balance', 'points', 'hand', 'status'])
+        self.history = {'balance': [balance], 'points': [[0]],
+                        'hands': [['']], 'statuses': [['start']]}
 
     # def __str__():
 
-    def update_points(self):
-        return self.calculate_points()
-
-    def calculate_points(self):
-        values = {"A": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7,
-                  "8": 8, "9": 9, "T": 10, "J": 10, "Q": 10, "K": 10}
-        hand_values = []
-        card_ranks = [rank[0] for rank in self.hand]
-
-        for rank in card_ranks:
-            val = values.get(rank)
-            if val == 1:
-                self.ace = True
-            elif val == 10:
-                self.ten = True
-            hand_values.append(val)
-
-        self.points = sum(hand_values)
-        if self.points <= 11 and self.ace:
-            self.points = self.points + 10
-
-    def update_status(self):
-        if self.points == 21:
-            if len(self.hand) == 2:
-                self.status = 'blackjack'
-            else:
-                self.status = 'stand'
-        elif self.points > 21:
-            self.status = 'bust'
-        # else:
-            # self.status = 'alive'  -- was this even needed?
-            # this condition would not work with the current double logic
-
-    def draw(self, deck):
-        self.hand.append(deck.pop())
-        self.update_points()
-        self.update_status()
-        print(f'{self.name} received {self.hand[-1]}')
-
-    def get_action(self):
+    def get_action(self, hand_number):
         pass
 
     def get_bet(self):
@@ -61,30 +19,35 @@ class Player:
 
     def save_result(self):
         self.history["balance"].append(self.balance)
-        self.history["points"].append(self.points)
-        self.history["hand"].append(self.hand)
-        self.history["status"].append(self.status)
+        # better list comprehension?
+        for i in range(len(self.hands)):
+            self.history["points"][i].append(self.hands[i].points)
+            self.history["hands"][i].append(self.hands[i].cards)
+            self.history["statuses"][i].append(self.hands[i].status)
+
+    def reset_hands(self):
+        self.hands = [Hand()]
 
 
 class Dealer(Player):
     def __init__(self):
         super().__init__('dealer', 0)
 
-    def get_action(self):
-        if self.points < 17:
+    def get_action(self, hand_number=0):
+        if self.hands[hand_number].points < 17:
             return "h"
         else:
             return "s"
 
     def get_upcard(self):
-        return self.hand[0]
+        return self.hands[0][0]
 
 
 class Human(Player):
     def __init__(self, name='human', balance=1000):
         super().__init__(name, balance)
 
-    def get_action(self):
+    def get_action(self, hand_number):
         return input("Would you like to hit (h),"
                      "stand (s) or double down (d): ")
 
@@ -99,10 +62,11 @@ class AiBasic(Player):
     def __init__(self, balance=1000):
         super().__init__('AiBasic', balance)
 
-    def get_action(self):
-        if self.points in (9, 10, 11) and len(self.hand) == 2:
+    def get_action(self, hand_number):
+        hand = self.hands[hand_number]        
+        if hand.points in (9, 10, 11) and len(hand.cards) == 2:
             return "d"
-        elif self.points < 17:
+        elif hand.points < 17:
             return "h"
         else:
             return "s"
