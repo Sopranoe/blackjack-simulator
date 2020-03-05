@@ -33,18 +33,30 @@ class Round():
                     hand.status = 'stand'
                     print(f'{player.name} standing on hand {hand_number + 1} '
                           f'with {str(hand.points)} points')
-                elif action == 'd':
+                elif action == 'd':  # double down
                     if len(hand.cards) == 2 and player.balance >= 2*hand.bet:
                         hand.bet *= 2
                         hand.status = 'stand'
                         hand.draw(self.game_deck.game_deck)
-                        print(f'{player.name} {hand.status} after double on hand '
-                              f'{hand_number + 1} with {"-".join(hand.cards)} - '
+                        print(f'{player.name} {hand.status} after double on hand'
+                              f'({hand_number + 1}) with {"-".join(hand.cards)} - '
                               f'{str(hand.points)} points')
                     elif len(hand.cards) > 2:
                         print("Double down not possible with more than 2 cards")
-                    elif player.balance < 2*player.bet:
+                    elif player.balance < 2*hand.bet:
                         print("Not enough money to double down.")
+                elif action == 'x':  # split
+                    if (len(hand.cards) == 2 and player.balance >= 2*hand.bet and hand.cards[0][0] == hand.cards[1][0]):
+                        player.split(hand_number)
+                        hand.draw(self.game_deck.game_deck)
+                        print(f'{player.name} {hand.status} after double on hand'
+                              f'({hand_number + 1}) with {"-".join(hand.cards)} - '
+                              f'{str(hand.points)} points')
+                    elif player.balance < 2*hand.bet:
+                        print("Not enough money to split.")
+                    elif player.balance < 2*hand.bet:
+                        print("Splitting not possible.")
+                    
         if all(hand.status == 'bust' for hand in player.hands):
             self.players_alive -= 1
 

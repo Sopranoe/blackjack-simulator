@@ -22,6 +22,8 @@ A python blackjack game with human and AI players.
   * basic strategy
   * other strategies
 * run simulations
+  * collect history
+    * player function for net return
   * export collected data
   * visualize data
 * Self-learning AI players
