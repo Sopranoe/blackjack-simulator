@@ -6,8 +6,7 @@ class Player:
         self.name = name
         self.hands = []
         self.balance = balance
-        self.history = {'balance': [balance], 'points': [[0]],
-                        'hands': [['']], 'statuses': [['start']]}
+        self.history = [balance]
 
     # def __str__():
 
@@ -18,15 +17,7 @@ class Player:
         return 100
 
     def save_result(self):
-        self.history["balance"].append(self.balance)
-        self.history["points"].append([])
-        self.history["hands"].append([])
-        self.history["statuses"].append([])
-        # better list comprehension?
-        for i in range(len(self.hands)):
-            self.history["points"][-1].append(self.hands[i].points)
-            self.history["hands"][-1].append(self.hands[i].cards)
-            self.history["statuses"][-1].append(self.hands[i].status)
+        self.history.append(self.balance)
 
     def reset_hands(self):
         self.hands = [Hand()]
