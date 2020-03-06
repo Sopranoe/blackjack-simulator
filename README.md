@@ -15,27 +15,40 @@ A python blackjack game with human and AI players.
 * Chips balance, betting and payout ✓
 * Add game with multiple game rounds ✓
 * Add double down action ✓
-* Add split action
-  * refactor hand as object ✓
+* Add split action ✓
+* Add insurance
 * AI players
   * dealer strategy ✓
   * basic strategy
   * other strategies
-* run simulations
-  * collect history
-    * player function for net return
+* collect game history
+  * save in dictionary or dataframe ✓
+  * write history to file
+  * run simulations
   * export collected data
   * visualize data
-* Self-learning AI players
+
+## Improvements
+* Restructure if else statements
+  * double down
+  * split
+  * evaluate winner
+* Improve class encapsulation
+* Clean up prints
 
 ## Possible Features
+* Self-learning AI players
 * GUI
 
-## Possible Python Concepts
+## Possible Python/Programming Concepts
 * Object Oriented Programming ✓
+* Magic methods (dunder)
+  * str
 * List Comprehension
 * Lamba
 * Exceptions
 * Tests
 * PyDoc
 * Logging
+* Decorators
+* Datastructures (Trees, Queue)

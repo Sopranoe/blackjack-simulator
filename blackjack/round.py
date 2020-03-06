@@ -21,11 +21,9 @@ class Round():
     def play_hand(self, player):
         print(f'_____{player.name}\'s turn_____')
         for hand_number, hand in enumerate(player.hands):
-            print(f'hand({hand_number + 1}): {"-".join(hand.cards)} '
-                  f'- {hand.points} points')
             while hand.status == 'alive':
-                print(f'{player.name}, hand({hand_number + 1}): '
-                      f'{"-".join(hand.cards)} - {str(hand.points)} points')
+                print(f'hand({hand_number + 1}): {"-".join(hand.cards)} '
+                      f'- {str(hand.points)} points')
                 action = player.get_action(hand_number)
                 if action == 'h':  # hit
                     hand.draw(self.game_deck.game_deck)
@@ -46,7 +44,9 @@ class Round():
                     elif player.balance < 2*hand.bet:
                         print("Not enough money to double down.")
                 elif action == 'x':  # split
-                    if (len(hand.cards) == 2 and player.balance >= 2*hand.bet and hand.cards[0][0] == hand.cards[1][0]):
+                    if (len(hand.cards) == 2
+                            and player.balance >= 2*hand.bet
+                            and hand.cards[0][0] == hand.cards[1][0]):
                         player.split(hand_number)
                         hand.draw(self.game_deck.game_deck)
                         print(f'{player.name} {hand.status} after double on hand'
@@ -54,9 +54,10 @@ class Round():
                               f'{str(hand.points)} points')
                     elif player.balance < 2*hand.bet:
                         print("Not enough money to split.")
-                    elif player.balance < 2*hand.bet:
-                        print("Splitting not possible.")
-                    
+                    elif len(hand.cards) != 2:
+                        print("Split not possible with more than 2 cards.")
+                    elif hand.cards[0][0] != hand.cards[1][0]:
+                        print("Split not possible with different card values.")
         if all(hand.status == 'bust' for hand in player.hands):
             self.players_alive -= 1
 
