@@ -16,7 +16,6 @@ A python blackjack game with human and AI players.
 * Add game with multiple game rounds ✓
 * Add double down action ✓
 * Add split action ✓
-* Add insurance
 * AI players
   * dealer strategy ✓
   * basic strategy
@@ -33,8 +32,11 @@ A python blackjack game with human and AI players.
   * double down
   * split
   * evaluate winner
+* Only show double and split when allowed
 * Improve class encapsulation
 * Clean up prints
+* Write rules
+* 
 
 ## Possible Features
 * Self-learning AI players
