@@ -18,10 +18,13 @@ A python blackjack game with human and AI players.
 * Add split action ✓
 * AI players
   * dealer strategy ✓
-  * basic strategy
-  * other strategies
+  * basic strategy ✓
+  * different [betting strategies](https://bj21.com/category/advantage-play/pages/progression-systems-don-t-work)
+    * Martingale
+    * Dahl's Progression
+  * betting chart strategy
 * collect game history
-  * save in dictionary or dataframe ✓
+  * save in datastructure ✓
   * write history to file
   * run simulations
   * export collected data
@@ -32,11 +35,11 @@ A python blackjack game with human and AI players.
   * double down
   * split
   * evaluate winner
+* Handle broke players
 * Only show double and split when allowed
 * Improve class encapsulation
 * Clean up prints
 * Write rules
-* 
 
 ## Possible Features
 * Self-learning AI players

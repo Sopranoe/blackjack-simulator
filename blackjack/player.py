@@ -2,19 +2,26 @@ from .hand import Hand
 
 
 class Player:
-    def __init__(self, name, balance):
+    def __init__(self, name, balance, bet_size=100, bet_strat='fixed'):
         self.name = name
         self.hands = []
         self.balance = balance
         self.history = [balance]
+        self.bet_strat = bet_strat
+        self.bet_size = bet_size
 
     # def __str__():
 
     def get_action(self, hand_number):
         pass
 
+    def fixed_bet(self):
+        return self.bet_size
+
     def get_bet(self):
-        return 100
+        # return 100
+        bet_strategies = {'fixed': self.fixed_bet}
+        return bet_strategies[self.bet_strat]()
 
     def save_result(self):
         self.history.append(self.balance)
@@ -44,7 +51,12 @@ class Dealer(Player):
 
 
 class Human(Player):
-    def __init__(self, name='human', balance=1000):
+    nr_humans = 0
+
+    def __init__(self, name=None, balance=1000):
+        Human.nr_humans += 1
+        if name is None:
+            name = f'human_{Human.nr_humans}'
         super().__init__(name, balance)
 
     def get_action(self, hand_number):
@@ -53,20 +65,28 @@ class Human(Player):
 
     def get_bet(self):
         while True:
-            bet = int(input("How much would you like to bet: "))
+            bet = float(input("How much would you like to bet: "))
             if bet > 0 and bet <= self.balance:
                 return bet
 
 
 class AiBasic(Player):
-    def __init__(self, balance=1000):
-        super().__init__('AiBasic', balance)
+    nr_ai_basics = 0
+
+    def __init__(self, balance=1000, stand_with=17,
+                 bet_size=100, bet_strat='fixed'):
+        AiBasic.nr_ai_basics += 1
+        name = f'AiBasic_{str(AiBasic.nr_ai_basics)} (sw{str(stand_with)})'
+        super().__init__(name, balance, bet_size, bet_strat)
+        self.stand_with = stand_with
 
     def get_action(self, hand_number):
-        hand = self.hands[hand_number]        
-        if hand.points in (9, 10, 11) and len(hand.cards) == 2:
+        hand = self.hands[hand_number]
+        if (hand.points in (9, 10, 11)
+                and len(hand.cards) == 2
+                and self.balance > 2*hand.bet):
             return "d"
-        elif hand.points < 17:
+        elif hand.points < self.stand_with:
             return "h"
         else:
             return "s"

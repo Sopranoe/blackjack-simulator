@@ -13,7 +13,7 @@ class Round():
         for player in self.players:
             player.reset_hands()
             player.hands[0].bet = player.get_bet()
-            print(f'{player.name} bets {player.hands[0].bet}')
+            print(f'{player.name} bets ${player.hands[0].bet}')
             player.hands[0].draw(self.game_deck.game_deck, 2)
         self.dealer.reset_hands()
         self.dealer.hands[0].draw(self.game_deck.game_deck, 2)  # open card
@@ -67,7 +67,7 @@ class Round():
             self.play_hand(player)
         if self.players_alive <= 0:
             print(f'Dealer win with {"-".join(self.dealer.hands[0].cards)}\'s '
-                  f'hand - {self.dealer.points} points')
+                  f'hand - {self.dealer.hands[0].points} points')
         else:
             self.play_hand(self.dealer)
         self.evaluate_winners()
