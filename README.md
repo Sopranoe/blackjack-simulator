@@ -1,6 +1,6 @@
 # Blackjack Simulator
 
-A python blackjack app with human and AI players. 
+A python blackjack app with bot and human players. 
 Play with human and AI players or simulate games with different AI player configurations.
 Compare the performance of different strategies and visualize the results.
 
