@@ -1,11 +1,11 @@
 import time
 from blackjack.deck import Deck
-from blackjack.player import Human, AiBasic
+from blackjack.player import Human, BotStatic
 from blackjack.round import Round
 
 
 def human_player_game():
-    players = [Human(), AiBasic()]
+    players = [Human(), BotStatic()]
     deck = Deck()
     run_game = True
 
@@ -25,8 +25,8 @@ def human_player_game():
 
 
 def simulate_game():
-    players = [AiBasic(500, 15), AiBasic(500, 16),
-               AiBasic(500, 17), AiBasic(500, 18)]
+    players = [BotStatic(500, 15), BotStatic(500, 16),
+               BotStatic(500, 17), BotStatic(500, 18)]
     deck = Deck()
     run_game = True
 

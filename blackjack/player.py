@@ -70,13 +70,13 @@ class Human(Player):
                 return bet
 
 
-class AiBasic(Player):
-    nr_ai_basics = 0
+class BotStatic(Player):
+    nr_bot_statics = 0
 
     def __init__(self, balance=1000, stand_with=17,
                  bet_size=100, bet_strat='fixed'):
-        AiBasic.nr_ai_basics += 1
-        name = f'AiBasic_{str(AiBasic.nr_ai_basics)} (sw{str(stand_with)})'
+        BotStatic.nr_bot_statics += 1
+        name = f'BotStatic_{str(BotStatic.nr_bot_statics)} (sw{str(stand_with)})'
         super().__init__(name, balance, bet_size, bet_strat)
         self.stand_with = stand_with
 
